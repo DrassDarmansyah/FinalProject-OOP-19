@@ -16,9 +16,12 @@ public class GameMap implements Disposable {
 
     private final TiledMap tiledMap;
     private final OrthogonalTiledMapRenderer mapRenderer;
+    private final MapConfig config;
 
-    public GameMap(String tmxFilePath) {
-        this.tiledMap = new TmxMapLoader().load(tmxFilePath);
+    public GameMap(MapConfig config) {
+        this.config = config;
+
+        this.tiledMap = new TmxMapLoader().load(config.getFilePath());
         this.mapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
         this.width = tiledMap.getProperties().get("width", Integer.class);
@@ -27,6 +30,20 @@ public class GameMap implements Disposable {
 
         this.tiles = new Tile[width][height];
         parseGrid();
+    }
+
+    public void triggerLeylineEffect() {
+        config.onLeyline(this);
+    }
+
+    public TiledMap getTiledMap() {
+        return tiledMap;
+    }
+
+    public void setTileLogic(int x, int y, TerrainType newType) {
+        if (x >= 0 && x < width && y >= 0 && y < height) {
+            tiles[x][y] = new Tile(x, y, newType);
+        }
     }
 
     public void render(OrthographicCamera camera) {
@@ -54,41 +71,76 @@ public class GameMap implements Disposable {
 
     private TerrainType checkLayerForTerrain(String layerName, int x, int y, TerrainType currentType) {
         TiledMapTileLayer layer = (TiledMapTileLayer) tiledMap.getLayers().get(layerName);
-        if (layer == null) return currentType;
+
+        if (layer == null) {
+            return currentType;
+        }
 
         TiledMapTileLayer.Cell cell = layer.getCell(x, y);
-        if (cell == null) return currentType;
+
+        if (cell == null) {
+            return currentType;
+        }
 
         TiledMapTile tile = cell.getTile();
-        if (tile == null) return currentType;
+
+        if (tile == null) {
+            return currentType;
+        }
 
         Object property = tile.getProperties().get("terrain");
+
         if (property != null) {
             String terrainName = property.toString().toUpperCase();
+
             try {
                 return TerrainType.valueOf(terrainName);
-            } catch (IllegalArgumentException e) {
+            }
+
+            catch (IllegalArgumentException e) {
                 System.err.println("Map Warning: Unknown terrain '" + terrainName + "' at " + x + "," + y);
             }
         }
+
         return currentType;
     }
 
     public Tile getTile(int x, int y) {
-        if (x < 0 || y < 0 || x >= width || y >= height) return null;
+        if (x < 0 || y < 0 || x >= width || y >= height) {
+            return null;
+        }
+
         return tiles[x][y];
     }
 
-    public int getWidth() { return width; }
-    public int getHeight() { return height; }
-    public int getTileSize() { return tileSize; }
+    public int getWidth() {
+        return width;
+    }
 
-    public float getPixelWidth() { return width * tileSize; }
-    public float getPixelHeight() { return height * tileSize; }
+    public int getHeight() {
+        return height;
+    }
+
+    public int getTileSize() {
+        return tileSize;
+    }
+
+    public float getPixelWidth() {
+        return width * tileSize;
+    }
+
+    public float getPixelHeight() {
+        return height * tileSize;
+    }
 
     @Override
     public void dispose() {
-        if (tiledMap != null) tiledMap.dispose();
-        if (mapRenderer != null) mapRenderer.dispose();
+        if (tiledMap != null) {
+            tiledMap.dispose();
+        }
+
+        if (mapRenderer != null) {
+            mapRenderer.dispose();
+        }
     }
 }

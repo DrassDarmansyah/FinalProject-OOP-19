@@ -7,7 +7,6 @@ import com.kelompok19.finpro.units.Stats;
 import com.kelompok19.finpro.units.Unit;
 
 public class CombatEngine {
-
     private static final int DOUBLING_THRESHOLD = 5;
     private static final double DEX_MULTIPLIER = 1.5;
     private static final double LUCK_MULTIPLIER = 0.5;
@@ -39,7 +38,9 @@ public class CombatEngine {
             preview.dHit = calculateHitRate(defender, attacker, map);
             preview.dCrit = calculateCritRate(defender);
             preview.dHits = (followUp == 2) ? 2 : 1;
-        } else {
+        }
+
+        else {
             preview.defenderCanCounter = false;
         }
 
@@ -47,8 +48,14 @@ public class CombatEngine {
     }
 
     public static int determineFollowUp(Unit a, Unit b) {
-        if (a.getStats().speed >= b.getStats().speed + DOUBLING_THRESHOLD) return 1;
-        if (b.getStats().speed >= a.getStats().speed + DOUBLING_THRESHOLD) return 2;
+        if (a.getStats().speed >= b.getStats().speed + DOUBLING_THRESHOLD) {
+            return 1;
+        }
+
+        if (b.getStats().speed >= a.getStats().speed + DOUBLING_THRESHOLD) {
+            return 2;
+        }
+
         return 0;
     }
 

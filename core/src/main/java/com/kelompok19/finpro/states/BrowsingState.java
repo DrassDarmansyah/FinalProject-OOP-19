@@ -8,12 +8,12 @@ import com.kelompok19.finpro.units.Unit;
 import java.util.List;
 
 public class BrowsingState extends BattleState {
-
     public BrowsingState(GameStateManager gsm, BattleContext context) {
         super(gsm, context);
 
         if (context.cursorX == 0 && context.cursorY == 0) {
             List<Unit> players = context.unitManager.getPlayerUnits();
+
             if (!players.isEmpty()) {
                 Unit p = players.get(0);
                 context.cursorX = p.getX();
@@ -25,16 +25,29 @@ public class BrowsingState extends BattleState {
 
     @Override
     public void update(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) context.cursorY++;
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) context.cursorY--;
-        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) context.cursorX--;
-        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) context.cursorX++;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            context.cursorY++;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            context.cursorY--;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+            context.cursorX--;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+            context.cursorX++;
+        }
+
         clampCursor();
 
         updateCamera(context.cursorX, context.cursorY);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             Unit u = context.unitManager.getPlayerUnitAt(context.cursorX, context.cursorY);
+
             if (u != null && !u.hasMoved()) {
                 gsm.push(new ActionMenuState(gsm, context, u, null));
             }
@@ -56,5 +69,7 @@ public class BrowsingState extends BattleState {
         context.cursorY = Math.max(0, Math.min(context.cursorY, context.map.getHeight() - 1));
     }
 
-    @Override public void dispose() {}
+    @Override public void dispose() {
+
+    }
 }

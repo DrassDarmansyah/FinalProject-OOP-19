@@ -27,10 +27,22 @@ public class MoveSelectionState extends BattleState {
 
     @Override
     public void update(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) context.cursorY++;
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) context.cursorY--;
-        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) context.cursorX--;
-        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) context.cursorX++;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            context.cursorY++;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            context.cursorY--;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+            context.cursorX--;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+            context.cursorX++;
+        }
+
         clampCursor();
         updateCamera(context.cursorX, context.cursorY);
 
@@ -69,7 +81,9 @@ public class MoveSelectionState extends BattleState {
         int maxMove = unit.getMoveRange();
 
         int[][] costMap = new int[mapW][mapH];
-        for(int i=0; i<mapW; i++) for(int j=0; j<mapH; j++) costMap[i][j] = 9999;
+        for(int i=0; i<mapW; i++) for(int j=0; j<mapH; j++) {
+            costMap[i][j] = 9999;
+        }
 
         Queue<int[]> queue = new LinkedList<>();
 
@@ -84,18 +98,24 @@ public class MoveSelectionState extends BattleState {
             int cy = current[1];
             int currentCost = costMap[cx][cy];
 
-            if (currentCost >= maxMove) continue;
+            if (currentCost >= maxMove) {
+                continue;
+            }
 
             for(int[] dir : dirs) {
                 int nx = cx + dir[0];
                 int ny = cy + dir[1];
 
-                if (nx < 0 || ny < 0 || nx >= mapW || ny >= mapH) continue;
+                if (nx < 0 || ny < 0 || nx >= mapW || ny >= mapH) {
+                    continue;
+                }
 
                 TerrainType terrain = context.map.getTile(nx, ny).getType();
                 int moveCost = terrain.getMoveCost(unit.getMovementType());
 
-                if (currentCost + moveCost > maxMove) continue;
+                if (currentCost + moveCost > maxMove) {
+                    continue;
+                }
 
                 Unit occupant = context.unitManager.getUnitAt(nx, ny);
                 if (occupant != null && occupant != unit && occupant.getType() != unit.getType()) {
@@ -116,7 +136,9 @@ public class MoveSelectionState extends BattleState {
                 if (costMap[x][y] <= maxMove) {
                     TerrainType terrain = context.map.getTile(x, y).getType();
 
-                    if (terrain == TerrainType.RUBBLE) continue;
+                    if (terrain == TerrainType.RUBBLE) {
+                        continue;
+                    }
 
                     if (!context.unitManager.isOccupied(x, y, unit)) {
                         validMoves.add(new int[]{x, y});
@@ -132,7 +154,9 @@ public class MoveSelectionState extends BattleState {
         }
 
         Weapon w = unit.getWeapon();
-        if (w == null) return;
+        if (w == null) {
+            return;
+        }
 
         for (int[] moveTile : validMoves) {
             int mx = moveTile[0];
@@ -145,10 +169,16 @@ public class MoveSelectionState extends BattleState {
 
             for (int x = minRx; x <= maxRx; x++) {
                 for (int y = minRy; y <= maxRy; y++) {
-                    if (isBlue[x][y]) continue;
-                    if (isAlreadyRed(x, y)) continue;
+                    if (isBlue[x][y]) {
+                        continue;
+                    }
+
+                    if (isAlreadyRed(x, y)) {
+                        continue;
+                    }
 
                     int dist = Math.abs(x - mx) + Math.abs(y - my);
+
                     if (dist >= w.rangeMin && dist <= w.rangeMax) {
                         attackableTiles.add(new int[]{x, y});
                     }
@@ -159,13 +189,19 @@ public class MoveSelectionState extends BattleState {
 
     private boolean isAlreadyRed(int x, int y) {
         for(int[] p : attackableTiles) {
-            if (p[0] == x && p[1] == y) return true;
+            if (p[0] == x && p[1] == y) {
+                return true;
+            }
         }
+
         return false;
     }
 
     private boolean isValidMove(int x, int y) {
-        for (int[] pos : validMoves) if (pos[0] == x && pos[1] == y) return true;
+        for (int[] pos : validMoves) if (pos[0] == x && pos[1] == y) {
+            return true;
+        }
+
         return false;
     }
 
@@ -174,5 +210,7 @@ public class MoveSelectionState extends BattleState {
         context.cursorY = Math.max(0, Math.min(context.cursorY, context.map.getHeight() - 1));
     }
 
-    @Override public void dispose() {}
+    @Override public void dispose() {
+
+    }
 }

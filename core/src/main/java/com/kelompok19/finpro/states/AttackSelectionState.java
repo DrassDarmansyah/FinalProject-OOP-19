@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import com.kelompok19.finpro.GameManager;
 import com.kelompok19.finpro.Weapon;
 import com.kelompok19.finpro.combat.CombatEngine;
 import com.kelompok19.finpro.combat.CombatPreview;
@@ -30,10 +31,22 @@ public class AttackSelectionState extends BattleState {
 
     @Override
     public void update(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) context.cursorY++;
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) context.cursorY--;
-        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) context.cursorX--;
-        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) context.cursorX++;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            context.cursorY++;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            context.cursorY--;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+            context.cursorX--;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+            context.cursorX++;
+        }
+
         clampCursor();
         updateCamera(context.cursorX, context.cursorY);
 
@@ -41,7 +54,9 @@ public class AttackSelectionState extends BattleState {
 
         if (target != null && isValidTarget(context.cursorX, context.cursorY)) {
             preview = CombatEngine.calculateCombat(attacker, target, context.map);
-        } else {
+        }
+
+        else {
             preview = null;
         }
 
@@ -54,12 +69,14 @@ public class AttackSelectionState extends BattleState {
             if (target != null && isValidTarget(context.cursorX, context.cursorY)) {
                 AttackCommand attack = new AttackCommand(attacker, target, context.map);
                 attack.execute();
-
                 attacker.setHasMoved(true);
-
                 context.unitManager.cleanup();
-
                 gsm.pop();
+                boolean allMoved = context.unitManager.getPlayerUnits().stream().allMatch(Unit::hasMoved);
+
+                if (allMoved) {
+                    GameManager.getInstance().endPlayerTurn(context.unitManager);
+                }
             }
         }
     }
@@ -76,6 +93,7 @@ public class AttackSelectionState extends BattleState {
         if (preview != null) {
             preview.render(batch, context.font, context.camera);
         }
+
         batch.end();
 
         renderTerrainInfo(batch);
@@ -84,9 +102,11 @@ public class AttackSelectionState extends BattleState {
     private void calculateAttackRange() {
         validTargets.clear();
         Weapon w = attacker.getWeapon();
+
         for (int x = 0; x < context.map.getWidth(); x++) {
             for (int y = 0; y < context.map.getHeight(); y++) {
                 int dist = Math.abs(x - attacker.getX()) + Math.abs(y - attacker.getY());
+
                 if (dist >= w.rangeMin && dist <= w.rangeMax) {
                     if (context.unitManager.getEnemyUnitAt(x, y) != null) {
                         validTargets.add(new int[]{x, y});
@@ -97,7 +117,10 @@ public class AttackSelectionState extends BattleState {
     }
 
     private boolean isValidTarget(int x, int y) {
-        for (int[] pos : validTargets) if (pos[0] == x && pos[1] == y) return true;
+        for (int[] pos : validTargets) if (pos[0] == x && pos[1] == y) {
+            return true;
+        }
+
         return false;
     }
 
@@ -106,5 +129,7 @@ public class AttackSelectionState extends BattleState {
         context.cursorY = Math.max(0, Math.min(context.cursorY, context.map.getHeight() - 1));
     }
 
-    @Override public void dispose() {}
+    @Override public void dispose() {
+
+    }
 }

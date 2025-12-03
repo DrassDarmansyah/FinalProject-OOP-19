@@ -1,18 +1,16 @@
 package com.kelompok19.finpro;
 
+import com.kelompok19.finpro.units.Unit;
 import com.kelompok19.finpro.units.UnitManager;
 
 public class GameManager {
     private static GameManager instance;
 
-    private UnitManager unitManager;
     private int turnCount;
     private boolean isPlayerTurn;
-    private boolean gameActive;
 
     private GameManager() {
-        this.gameActive = false;
-        this.turnCount = 0;
+        this.turnCount = 1;
         this.isPlayerTurn = true;
     }
 
@@ -20,40 +18,42 @@ public class GameManager {
         if (instance == null) {
             instance = new GameManager();
         }
+
         return instance;
     }
 
-    public void startNewSession(UnitManager unitManager) {
-        this.unitManager = unitManager;
+    public void startNewSession() {
         this.turnCount = 1;
         this.isPlayerTurn = true;
-        this.gameActive = true;
-        System.out.println("New Game Session Started");
+        System.out.println("New Game started");
+        System.out.println("Turn 1");
     }
 
-    public void endTurn() {
-        isPlayerTurn = !isPlayerTurn;
-        if (isPlayerTurn) {
-            turnCount++;
-            System.out.println("--- Turn " + turnCount + " Start ---");
-        } else {
-            System.out.println("--- Enemy Phase ---");
+    public void endPlayerTurn(UnitManager unitManager) {
+        System.out.println("Player Phase ended");
+        isPlayerTurn = false;
+
+        for(Unit u : unitManager.getPlayerUnits()) {
+            u.setHasMoved(false);
         }
+
+        startPlayerTurn(unitManager);
     }
 
-    public UnitManager getUnitManager() {
-        return unitManager;
+    public void startPlayerTurn(UnitManager unitManager) {
+        turnCount++;
+        isPlayerTurn = true;
+        System.out.println("Turn " + turnCount + "start: Player Phase");
+
+        for(Unit u : unitManager.getEnemyUnits()) {
+            u.setHasMoved(false);
+        }
     }
 
     public boolean isPlayerTurn() {
         return isPlayerTurn;
     }
-
     public int getTurnCount() {
         return turnCount;
-    }
-
-    public boolean isGameActive() {
-        return gameActive;
     }
 }

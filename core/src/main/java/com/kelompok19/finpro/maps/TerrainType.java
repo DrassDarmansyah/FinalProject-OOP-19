@@ -28,18 +28,36 @@ public enum TerrainType {
                 return 1;
 
             case RUBBLE:
-                if (moveType == MovementType.MAGE) return 1;
+                if (moveType == MovementType.MAGE) {
+                    return 1;
+                }
+
                 return 999;
 
             case WATER:
-                if (moveType == MovementType.MAGE) return 1;
-                if (moveType == MovementType.LORD || moveType == MovementType.MONSTER) return 5;
-                if (moveType == MovementType.MONSTER_ELITE || moveType == MovementType.BEAST) return 4;
+                if (moveType == MovementType.MAGE) {
+                    return 1;
+                }
+
+                if (moveType == MovementType.LORD || moveType == MovementType.MONSTER) {
+                    return 5;
+                }
+
+                if (moveType == MovementType.MONSTER_ELITE || moveType == MovementType.BEAST) {
+                    return 4;
+                }
+
                 return 999;
 
             case WOODS:
-                if (moveType == MovementType.MAGE) return 1;
-                if (moveType == MovementType.CAVALRY) return 3;
+                if (moveType == MovementType.MAGE) {
+                    return 1;
+                }
+
+                if (moveType == MovementType.CAVALRY) {
+                    return 3;
+                }
+
                 return 2;
 
             default:

@@ -20,4 +20,17 @@ public class Stats {
         this.defense = defense;
         this.resistance = resistance;
     }
+
+    public Stats add(Stats other) {
+        return new Stats(
+            this.hp + other.hp,
+            this.strength + other.strength,
+            this.magic + other.magic,
+            this.dexterity + other.dexterity,
+            this.speed + other.speed,
+            this.luck + other.luck,
+            this.defense + other.defense,
+            this.resistance + other.resistance
+        );
+    }
 }

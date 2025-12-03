@@ -3,9 +3,13 @@ package com.kelompok19.finpro.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.kelompok19.finpro.GameManager;
 import com.kelompok19.finpro.Weapon;
+import com.kelompok19.finpro.commands.AccessCommand;
 import com.kelompok19.finpro.commands.ActionMenu;
 import com.kelompok19.finpro.commands.MoveCommand;
+import com.kelompok19.finpro.commands.WaitCommand;
+import com.kelompok19.finpro.maps.TerrainType;
 import com.kelompok19.finpro.units.Unit;
 
 public class ActionMenuState extends BattleState {
@@ -23,16 +27,31 @@ public class ActionMenuState extends BattleState {
         boolean canMove = !isPostMove;
         boolean canAttack = checkCanAttack(unit);
 
-        menu.show(canMove, canAttack, isPostMove);
+        boolean canAccess = false;
+        if (unit.getJob().hasOriginPulse()) {
+            TerrainType currentTerrain = context.map.getTile(unit.getX(), unit.getY()).getType();
+
+            if (currentTerrain == TerrainType.LEYLINE) {
+                canAccess = true;
+            }
+        }
+
+        menu.show(canMove, canAttack, canAccess, isPostMove);
     }
 
     @Override
     public void update(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) menu.navigateUp();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) menu.navigateDown();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            menu.navigateUp();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            menu.navigateDown();
+        }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             String choice = menu.getSelectedOption();
+
             if (choice == null) return;
 
             switch (choice) {
@@ -42,9 +61,15 @@ public class ActionMenuState extends BattleState {
                 case ActionMenu.CMD_ATTACK:
                     gsm.set(new AttackSelectionState(gsm, context, selectedUnit, lastMove));
                     break;
+                case ActionMenu.CMD_ACCESS:
+                    AccessCommand access = new AccessCommand(context.map);
+                    access.execute();
+                    new WaitCommand(selectedUnit).execute();
+                    finishAction();
+                    break;
                 case ActionMenu.CMD_WAIT:
-                    selectedUnit.setHasMoved(true);
-                    gsm.pop();
+                    new WaitCommand(selectedUnit).execute();
+                    finishAction();
                     break;
             }
         }
@@ -52,11 +77,19 @@ public class ActionMenuState extends BattleState {
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE) || Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             if (lastMove != null) {
                 lastMove.undo();
-
                 gsm.set(new MoveSelectionState(gsm, context, selectedUnit));
             } else {
                 gsm.pop();
             }
+        }
+    }
+
+    private void finishAction() {
+        gsm.pop();
+        boolean allMoved = context.unitManager.getPlayerUnits().stream().allMatch(Unit::hasMoved);
+
+        if (allMoved) {
+            GameManager.getInstance().endPlayerTurn(context.unitManager);
         }
     }
 
@@ -66,22 +99,27 @@ public class ActionMenuState extends BattleState {
         batch.begin();
         menu.render(batch, context.font, selectedUnit.getX(), selectedUnit.getY(), context.camera);
         batch.end();
-        renderTerrainInfo(batch);
-    }
-
-    @Override
-    public void dispose() {
-        menu.dispose();
     }
 
     private boolean checkCanAttack(Unit unit) {
         Weapon w = unit.getWeapon();
-        if (w == null) return false;
+
+        if (w == null) {
+            return false;
+        }
 
         for (Unit enemy : context.unitManager.getEnemyUnits()) {
             int dist = Math.abs(unit.getX() - enemy.getX()) + Math.abs(unit.getY() - enemy.getY());
-            if (dist >= w.rangeMin && dist <= w.rangeMax) return true;
+
+            if (dist >= w.rangeMin && dist <= w.rangeMax) {
+                return true;
+            }
         }
+
         return false;
+    }
+
+    @Override public void dispose() {
+        menu.dispose();
     }
 }

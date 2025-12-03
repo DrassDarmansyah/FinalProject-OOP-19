@@ -1,5 +1,6 @@
 package com.kelompok19.finpro.commands;
 
+import com.kelompok19.finpro.Weapon;
 import com.kelompok19.finpro.combat.CombatEngine;
 import com.kelompok19.finpro.maps.GameMap;
 import com.kelompok19.finpro.units.Unit;
@@ -17,7 +18,7 @@ public class AttackCommand implements Command {
 
     @Override
     public void execute() {
-        System.out.println("--- COMBAT START ---");
+        System.out.println("COMBAT START");
 
         int hitRate = CombatEngine.calculateHitRate(attacker, defender, map);
         int critRate = CombatEngine.calculateCritRate(attacker);
@@ -31,11 +32,18 @@ public class AttackCommand implements Command {
             return;
         }
 
-        int dHit = CombatEngine.calculateHitRate(defender, attacker, map);
-        int dCrit = CombatEngine.calculateCritRate(defender);
-        int dDmg = CombatEngine.calculateDamage(defender, attacker, map);
+        Weapon dWeapon = defender.getWeapon();
+        int dist = Math.abs(attacker.getX() - defender.getX()) + Math.abs(attacker.getY() - defender.getY());
 
-        performStrike(defender, attacker, dHit, dCrit, dDmg);
+        boolean canCounter = dWeapon != null && dist >= dWeapon.rangeMin && dist <= dWeapon.rangeMax;
+
+        if (canCounter) {
+            int dHit = CombatEngine.calculateHitRate(defender, attacker, map);
+            int dCrit = CombatEngine.calculateCritRate(defender);
+            int dDmg = CombatEngine.calculateDamage(defender, attacker, map);
+
+            performStrike(defender, attacker, dHit, dCrit, dDmg);
+        }
 
         if (attacker.getCurrentHp() <= 0) {
             handleDeath(attacker);
@@ -43,17 +51,24 @@ public class AttackCommand implements Command {
         }
 
         if (followUp == 1) {
-            System.out.println(">> " + attacker.getName() + " attacks again!");
+            System.out.println(attacker.getName() + " attacks again!");
             performStrike(attacker, defender, hitRate, critRate, damage);
-        } else if (followUp == 2) {
-            System.out.println(">> " + defender.getName() + " attacks again!");
+        }
+
+        else if (followUp == 2 && canCounter) {
+            System.out.println(defender.getName() + " attacks again!");
+
+            int dHit = CombatEngine.calculateHitRate(defender, attacker, map);
+            int dCrit = CombatEngine.calculateCritRate(defender);
+            int dDmg = CombatEngine.calculateDamage(defender, attacker, map);
+
             performStrike(defender, attacker, dHit, dCrit, dDmg);
         }
 
         if (defender.getCurrentHp() <= 0) handleDeath(defender);
         if (attacker.getCurrentHp() <= 0) handleDeath(attacker);
 
-        System.out.println("--- COMBAT END ---");
+        System.out.println("COMBAT END");
     }
 
     private void performStrike(Unit source, Unit target, int hit, int crit, int dmg) {

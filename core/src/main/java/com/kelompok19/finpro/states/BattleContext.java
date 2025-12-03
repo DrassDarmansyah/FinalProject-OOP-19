@@ -49,6 +49,9 @@ public class BattleContext {
     public void dispose() {
         mapOverlay.dispose();
         terrainInfo.dispose();
-        if (whitePixel != null) whitePixel.dispose();
+
+        if (whitePixel != null) {
+            whitePixel.dispose();
+        }
     }
 }

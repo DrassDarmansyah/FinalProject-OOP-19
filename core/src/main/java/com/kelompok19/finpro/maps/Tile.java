@@ -11,16 +11,20 @@ public class Tile {
         this.type = type;
     }
 
-    public int getX() { return x; }
-    public int getY() { return y; }
-    public TerrainType getType() { return type; }
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public TerrainType getType() {
+        return type;
+    }
 
     @Override
     public String toString() {
-        return "Tile{" +
-            "x=" + x +
-            ", y=" + y +
-            ", type=" + type +
-            '}';
+        return "Tile{" + "x=" + x + ", y=" + y + ", type=" + type + '}';
     }
 }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.kelompok19.finpro.combat.CombatPreview;
 import com.kelompok19.finpro.maps.GameMap;
+import com.kelompok19.finpro.maps.MapConfig;
 import com.kelompok19.finpro.states.BattleContext;
 import com.kelompok19.finpro.states.BrowsingState;
 import com.kelompok19.finpro.states.GameStateManager;
@@ -28,7 +29,7 @@ public class Main extends ApplicationAdapter {
         font = new BitmapFont();
         gsm = new GameStateManager();
 
-        map = new GameMap("maps/map1.tmx");
+        map = new GameMap(MapConfig.CHAPTER_1);
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -42,6 +43,8 @@ public class Main extends ApplicationAdapter {
         camera.update();
 
         unitManager = new UnitManager(map.getHeight());
+
+        GameManager.getInstance().startNewSession();
 
         BattleContext context = new BattleContext(map, unitManager, camera, batch, font);
 

@@ -22,6 +22,7 @@ public abstract class BattleState implements GameState {
         for(com.kelompok19.finpro.units.Unit u : context.unitManager.getPlayerUnits()) {
             u.render(batch, context.whitePixel);
         }
+
         for(com.kelompok19.finpro.units.Unit u : context.unitManager.getEnemyUnits()) {
             u.render(batch, context.whitePixel);
         }
@@ -31,6 +32,7 @@ public abstract class BattleState implements GameState {
 
     protected void renderTerrainInfo(SpriteBatch batch) {
         Tile tile = context.map.getTile(context.cursorX, context.cursorY);
+
         if (tile != null) {
             batch.begin();
             context.terrainInfo.render(batch, context.font, context.camera, tile.getType());
@@ -56,13 +58,17 @@ public abstract class BattleState implements GameState {
 
         if (mapW < context.camera.viewportWidth * context.camera.zoom) {
             context.camera.position.x = mapW / 2f;
-        } else {
+        }
+
+        else {
             context.camera.position.x = Math.max(viewportHalfW, Math.min(context.camera.position.x, mapW - viewportHalfW));
         }
 
         if (mapH < context.camera.viewportHeight * context.camera.zoom) {
             context.camera.position.y = mapH / 2f;
-        } else {
+        }
+
+        else {
             context.camera.position.y = Math.max(viewportHalfH, Math.min(context.camera.position.y, mapH - viewportHalfH));
         }
 

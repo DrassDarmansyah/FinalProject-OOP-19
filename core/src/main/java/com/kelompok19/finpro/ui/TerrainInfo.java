@@ -24,7 +24,9 @@ public class TerrainInfo implements Disposable {
     }
 
     public void render(SpriteBatch batch, BitmapFont font, OrthographicCamera camera, TerrainType terrain) {
-        if (terrain == null) return;
+        if (terrain == null) {
+            return;
+        }
 
         float camLeft = camera.position.x - (camera.viewportWidth * camera.zoom / 2);
         float camBottom = camera.position.y - (camera.viewportHeight * camera.zoom / 2);

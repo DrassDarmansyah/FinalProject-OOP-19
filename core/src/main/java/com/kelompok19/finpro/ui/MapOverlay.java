@@ -35,6 +35,7 @@ public class MapOverlay implements Disposable {
 
     public void drawRangeTiles(SpriteBatch batch, Array<int[]> tiles, boolean isAttack) {
         Texture textureToUse = isAttack ? attackRangeTex : moveRangeTex;
+
         for (int[] pos : tiles) {
             batch.draw(textureToUse, pos[0] * TILE_SIZE, pos[1] * TILE_SIZE);
         }

@@ -11,8 +11,14 @@ public class GameStateManager {
         states = new Stack<>();
     }
 
-    public void push(GameState state) { states.push(state); }
-    public void pop() { states.pop().dispose(); }
+    public void push(GameState state) {
+        states.push(state);
+    }
+
+    public void pop() {
+        states.pop().dispose();
+    }
+
     public void set(GameState state) {
         states.pop().dispose();
         states.push(state);
