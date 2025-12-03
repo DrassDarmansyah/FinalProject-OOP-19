@@ -1,0 +1,61 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Map1.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "C:/Users/HP/Desktop/Pipoya RPG World Tileset 48x48 40x40 32x32 for Tiled1.5/48x48/pipo-map001.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/HP/Desktop/Pipoya RPG World Tileset 48x48 40x40 32x32 for Tiled1.5/48x48/pipo-map001_at.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/HP/Desktop/Pipoya RPG World Tileset 48x48 40x40 32x32 for Tiled1.5/48x48/sample.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 450,
+                "y": 518
+            }
+        },
+        "Map1.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 434,
+                "y": 464
+            }
+        },
+        "tileset.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/Users/HP/Documents/FT/OOP 2025/Finpro/assets/maps",
+    "map.height": 22,
+    "map.lastUsedFormat": "tmx",
+    "map.layerDataFormat": "3",
+    "map.tileHeight": 48,
+    "map.tileWidth": 48,
+    "map.width": 20,
+    "openFiles": [
+        "Map1.tmx",
+        "tileset.tsx"
+    ],
+    "project": "maps.tiled-project",
+    "recentFiles": [
+        "tileset.tsx",
+        "Map1.tmx",
+        "C:/Users/HP/Desktop/Pipoya RPG World Tileset 48x48 40x40 32x32 for Tiled1.5/48x48/sample.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 48,
+        "width": 48
+    }
+}

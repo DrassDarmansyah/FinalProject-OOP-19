@@ -1,0 +1,65 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "C:/Users/HP/Desktop/Pipoya RPG World Tileset 48x48 40x40 32x32 for Tiled1.5/32x32/sample.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "C:/Users/HP/Desktop/Pipoya RPG World Tileset 48x48 40x40 32x32 for Tiled1.5/32x32/pipo-map001.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/HP/Desktop/Pipoya RPG World Tileset 48x48 40x40 32x32 for Tiled1.5/32x32/pipo-map001_at.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/HP/Desktop/Pipoya RPG World Tileset 48x48 40x40 32x32 for Tiled1.5/32x32/sample.tmx": {
+            "scale": 0.85796875,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 222.61883081405935,
+                "y": 320.5244946275723
+            }
+        },
+        "main.tmx": {
+            "scale": 1,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 438,
+                "y": 353
+            }
+        },
+        "objects.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "frame.defaultDuration": 200,
+    "last.imagePath": "C:/Users/HP/Documents/FT/OOP 2025/Finpro/assets/maps/objects/Crystals",
+    "map.height": 22,
+    "map.lastUsedFormat": "tmx",
+    "map.layerDataFormat": "3",
+    "map.width": 20,
+    "openFiles": [
+        "main.tmx",
+        "tileset.tsx",
+        "objects.tsx",
+        "C:/Users/HP/Desktop/Pipoya RPG World Tileset 48x48 40x40 32x32 for Tiled1.5/32x32/sample.tmx"
+    ],
+    "project": "c6.tiled-project",
+    "recentFiles": [
+        "main.tmx",
+        "tileset.tsx",
+        "objects.tsx",
+        "C:/Users/HP/Desktop/Pipoya RPG World Tileset 48x48 40x40 32x32 for Tiled1.5/32x32/sample.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.type": 1
+}

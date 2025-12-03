@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="20" height="22" tilewidth="48" tileheight="48" infinite="0" nextlayerid="6" nextobjectid="1">
+ <tileset firstgid="1" source="tileset.tsx"/>
+ <layer id="1" name="ground" width="20" height="22">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYBzFo3gUj+JRPIqHGQYA8xsBuQ==
+  </data>
+ </layer>
+ <layer id="2" name="background" width="20" height="22">
+  <data encoding="base64" compression="zlib">
+   eJylU9sJwzAMdEfoMmlnKCTpCv0JXaGBDJF8BLxEZ6wMMRVCT+dAP7bufGfZKf3RX1IYA3AWqDfDfcHaQ9HMR1V00LtDPRWO5RHrad68HjEGw1tE05O14prs3J6sEY/erF7NT8AbxgqcO+GVu9satAom4M2E2+qtAueOeqN/oKLkvkF9iTeu16NX5jkyM5X6aQ+nx703jx5Fx+S0ztfQ8nYlRP6pB9IczuhF5qDNR8qKOZSfmTXNWzY40r7lTdL8AWspNJc=
+  </data>
+ </layer>
+ <layer id="3" name="foreground" width="20" height="22">
+  <data encoding="base64" compression="zlib">
+   eJxjYBg6wBANUwo80fAogIDRcB4FowAzH1CaF9DzwWheoD0AAOLBBjM=
+  </data>
+ </layer>
+ <layer id="5" name="foregroundTop" width="20" height="22">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRQGtgiAVTAjyx4FGACgD4RgJj
+  </data>
+ </layer>
+ <layer id="4" name="objects" width="20" height="22">
+  <data encoding="base64" compression="zlib">
+   eJxjYBhaQAaKR8EoGAWjYBSMAnwAAGD/ADk=
+  </data>
+ </layer>
+</map>

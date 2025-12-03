@@ -1,0 +1,44 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Map1.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "Map1.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 477.33333333333337,
+                "y": 338.6666666666667
+            }
+        },
+        "tileset.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/Users/HP/Documents/FT/OOP 2025/Finpro/assets/maps",
+    "map.height": 22,
+    "map.layerDataFormat": "3",
+    "map.tileHeight": 48,
+    "map.tileWidth": 48,
+    "map.width": 20,
+    "openFiles": [
+        "Map1.tmx",
+        "tileset.tsx"
+    ],
+    "project": "tiled.tiled-project",
+    "recentFiles": [
+        "tileset.tsx",
+        "Map1.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 32,
+        "width": 32
+    }
+}

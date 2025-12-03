@@ -1,0 +1,24 @@
+{
+    "activeFile": "maps/Map1.tmx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "maps/Map1.tmx": {
+            "scale": 0.521780303030303,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 479.12885662431944,
+                "y": 527.0417422867514
+            }
+        }
+    },
+    "map.lastUsedFormat": "tmx",
+    "openFiles": [
+        "maps/Map1.tmx"
+    ],
+    "project": "tiled.tiled-project",
+    "recentFiles": [
+        "maps/Map1.tmx"
+    ]
+}
