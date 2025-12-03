@@ -61,32 +61,33 @@ public class UnitManager {
     private void setupCharacters(int mapHeight) {
         BiFunction<Integer, Integer, int[]> convert = (v, h) -> new int[]{h - 1, mapHeight - v};
 
-        Stats protagStats = new Stats(21, 9, 6, 9, 11, 7, 6, 3);
-        Weapon protagWeapon = new Weapon(8, 85, 0, 0, 1);
+        Stats heroStats = new Stats(25, 12, 6, 14, 15, 10, 8, 5);
+        Weapon heroWeapon = new Weapon(8, 90, 10, 5, 1);
         int[] pos = convert.apply(7, 12);
-        playerUnits.add(new Unit("Hero", pos[0], pos[1], UnitType.PLAYER, protagStats, protagWeapon));
+        playerUnits.add(new Unit("Hero", pos[0], pos[1], UnitType.PLAYER, UnitJob.SWORDMASTER, heroStats, heroWeapon));
 
-        Stats p1Stats = new Stats(25, 12, 0, 8, 9, 5, 8, 2);
-        Weapon p1Weapon = new Weapon(10, 80, 5, 0, 1);
+        Stats jagenStats = new Stats(32, 14, 0, 11, 10, 4, 11, 3);
+        Weapon jagenWeapon = new Weapon(10, 80, 5, 0, 1);
         pos = convert.apply(6, 11);
-        playerUnits.add(new Unit("Jagen", pos[0], pos[1], UnitType.PLAYER, p1Stats, p1Weapon));
+        playerUnits.add(new Unit("Jagen", pos[0], pos[1], UnitType.PLAYER, UnitJob.LANCER, jagenStats, jagenWeapon));
 
-        Stats p2Stats = new Stats(18, 5, 12, 10, 10, 6, 4, 7);
-        Weapon p2Weapon = new Weapon(4, 95, 0, 0, 1, 2);
+        Stats mageStats = new Stats(20, 3, 15, 12, 11, 8, 4, 9);
+        Weapon mageWeapon = new Weapon(6, 85, 5, 0, 1, 2);
         pos = convert.apply(5, 13);
-        playerUnits.add(new Unit("Mage", pos[0], pos[1], UnitType.PLAYER, p2Stats, p2Weapon));
+        playerUnits.add(new Unit("Mage", pos[0], pos[1], UnitType.PLAYER, UnitJob.WIZARD, mageStats, mageWeapon));
 
-        Stats enemyStats = new Stats(20, 7, 0, 7, 7, 5, 5, 2);
-        Weapon enemyWeapon = new Weapon(5, 90, 0, 0, 1);
+        Stats orcStats = new Stats(24, 11, 0, 8, 7, 3, 6, 1);
+        Weapon axeWeapon = new Weapon(9, 70, 0, 0, 1);
 
         int[][] enemyPos = {
             convert.apply(8, 12), convert.apply(13, 16), convert.apply(13, 18),
             convert.apply(11, 7), convert.apply(13, 6), convert.apply(13, 8)
         };
 
-        int count = 1;
-        for (int[] p : enemyPos) {
-            enemyUnits.add(new Unit("Orc " + count++, p[0], p[1], UnitType.ENEMY, enemyStats, enemyWeapon));
-        }
+        enemyUnits.add(new Unit("Orc 1", enemyPos[0][0], enemyPos[0][1], UnitType.ENEMY, UnitJob.ORC, orcStats, axeWeapon));
+        enemyUnits.add(new Unit("Skel 1", enemyPos[1][0], enemyPos[1][1], UnitType.ENEMY, UnitJob.SKELETON, new Stats(18, 9, 0, 12, 10, 5, 4, 2), axeWeapon));
+        enemyUnits.add(new Unit("Skel 2", enemyPos[2][0], enemyPos[2][1], UnitType.ENEMY, UnitJob.SKELETON_ARCHER, new Stats(18, 8, 0, 13, 9, 5, 3, 2), new Weapon(7, 85, 0, 0, 2, 2)));
+        enemyUnits.add(new Unit("Orc 2", enemyPos[3][0], enemyPos[3][1], UnitType.ENEMY, UnitJob.ORC, orcStats, axeWeapon));
+        enemyUnits.add(new Unit("Boss", enemyPos[4][0], enemyPos[4][1], UnitType.ENEMY, UnitJob.ELITE_ORC, new Stats(35, 15, 0, 10, 8, 5, 12, 4), new Weapon(12, 75, 10, 0, 1)));
     }
 }

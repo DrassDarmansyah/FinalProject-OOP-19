@@ -1,24 +1,27 @@
 package com.kelompok19.finpro.commands;
 
 import com.kelompok19.finpro.combat.CombatEngine;
+import com.kelompok19.finpro.maps.GameMap;
 import com.kelompok19.finpro.units.Unit;
 
 public class AttackCommand implements Command {
     private final Unit attacker;
     private final Unit defender;
+    private final GameMap map;
 
-    public AttackCommand(Unit attacker, Unit defender) {
+    public AttackCommand(Unit attacker, Unit defender, GameMap map) {
         this.attacker = attacker;
         this.defender = defender;
+        this.map = map;
     }
 
     @Override
     public void execute() {
         System.out.println("--- COMBAT START ---");
 
-        int hitRate = CombatEngine.calculateHitRate(attacker, defender);
+        int hitRate = CombatEngine.calculateHitRate(attacker, defender, map);
         int critRate = CombatEngine.calculateCritRate(attacker);
-        int damage = CombatEngine.calculateDamage(attacker, defender);
+        int damage = CombatEngine.calculateDamage(attacker, defender, map);
         int followUp = CombatEngine.determineFollowUp(attacker, defender);
 
         performStrike(attacker, defender, hitRate, critRate, damage);
@@ -28,9 +31,9 @@ public class AttackCommand implements Command {
             return;
         }
 
-        int dHit = CombatEngine.calculateHitRate(defender, attacker);
+        int dHit = CombatEngine.calculateHitRate(defender, attacker, map);
         int dCrit = CombatEngine.calculateCritRate(defender);
-        int dDmg = CombatEngine.calculateDamage(defender, attacker);
+        int dDmg = CombatEngine.calculateDamage(defender, attacker, map);
 
         performStrike(defender, attacker, dHit, dCrit, dDmg);
 

@@ -4,26 +4,23 @@ import com.kelompok19.finpro.units.Unit;
 
 public class MoveCommand implements Command {
     private final Unit unit;
+    private final int destX, destY;
     private final int startX, startY;
-    private final int endX, endY;
 
-    public MoveCommand(Unit unit, int endX, int endY) {
+    public MoveCommand(Unit unit, int destX, int destY) {
         this.unit = unit;
-        this.endX = endX;
-        this.endY = endY;
+        this.destX = destX;
+        this.destY = destY;
         this.startX = unit.getX();
         this.startY = unit.getY();
     }
 
     @Override
     public void execute() {
-        unit.setPosition(endX, endY);
+        unit.setPosition(destX, destY);
     }
 
     public void undo() {
         unit.setPosition(startX, startY);
     }
-
-    public int getDestX() { return endX; }
-    public int getDestY() { return endY; }
 }

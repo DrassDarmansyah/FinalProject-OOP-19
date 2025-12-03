@@ -1,8 +1,5 @@
 package com.kelompok19.finpro;
 
-/**
- * Represents a weapon's combat properties.
- */
 public class Weapon {
     public final int might;
     public final int hit;
