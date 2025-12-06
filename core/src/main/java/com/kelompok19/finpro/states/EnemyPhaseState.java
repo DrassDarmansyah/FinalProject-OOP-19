@@ -93,7 +93,7 @@ public class EnemyPhaseState extends BattleState {
         batch.end();
         renderPopups(batch);
         batch.begin();
-        context.turnPreview.render(batch, context.font, context.camera, GameManager.getInstance().getTurnCount(), false, context.config.getObjectiveText());
+        context.turnPreview.render(batch, context.font, context.camera, GameManager.getInstance().getTurnCount(), false, context.config.getObjectiveText(), context.isShowDangerZone(), context.isFightAnimationsOn());
         batch.end();
         renderTerrainInfo(batch);
     }

@@ -16,7 +16,7 @@ public class RallyCommand implements Command {
     @Override
     public void execute() {
         System.out.println(user.getName() + " uses Rally!");
-        Stats bonus = new Stats(0, 4, 0, 0, 4, 0, 0, 0);
+        Stats bonus = new Stats(0, 1, 0, 0, 1, 0, 0, 0);
 
         for (Unit ally : manager.getPlayerUnits()) {
             if (ally == user) {

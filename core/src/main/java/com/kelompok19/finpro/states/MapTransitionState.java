@@ -46,7 +46,7 @@ public class MapTransitionState implements GameState {
         UnitManager unitManager = oldContext.unitManager;
         unitManager.healAllUnits();
         BattleContext newContext = new BattleContext(newMap, unitManager, oldContext.camera, oldContext.batch, oldContext.font, nextMapConfig);
-        gsm.set(new UnitSelectionState(gsm, newContext));
+        gsm.set(new BattlePrepsState(gsm, newContext));
     }
 
     @Override

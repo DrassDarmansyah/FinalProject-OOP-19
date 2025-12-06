@@ -1,6 +1,5 @@
 package com.kelompok19.finpro.states;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.kelompok19.finpro.GameManager;
 import com.kelompok19.finpro.combat.CombatStep;
@@ -8,7 +7,7 @@ import com.kelompok19.finpro.units.Unit;
 
 import java.util.List;
 
-public class CombatCutsceneState extends BattleState {
+public class NoAnimationState extends BattleState {
     private final List<CombatStep> steps;
     private int stepIndex = 0;
 
@@ -17,7 +16,7 @@ public class CombatCutsceneState extends BattleState {
 
     private final Unit attacker;
 
-    public CombatCutsceneState(GameStateManager gsm, BattleContext context, List<CombatStep> steps, Unit originalAttacker) {
+    public NoAnimationState(GameStateManager gsm, BattleContext context, List<CombatStep> steps, Unit originalAttacker) {
         super(gsm, context);
         this.steps = steps;
         this.attacker = originalAttacker;
@@ -41,21 +40,30 @@ public class CombatCutsceneState extends BattleState {
     }
 
     private void executeStep(CombatStep step) {
+        float popupX = step.target.getX() * 48;
+        float popupY = step.target.getY() * 48;
+
         switch (step.type) {
             case ATTACK:
                 step.target.takeDamage(step.damage);
-                Color c = step.isCrit ? Color.YELLOW : Color.WHITE;
-                float scale = step.isCrit ? 1.5f : 1.0f;
-                context.addDamagePopup(String.valueOf(step.damage), step.target.getX(), step.target.getY(), c, scale);
+
+                if (step.isCrit) {
+                    context.popupPool.createCritDamage(step.damage, popupX, popupY);
+                }
+
+                else {
+                    context.popupPool.createNormalDamage(step.damage, popupX, popupY);
+                }
+
                 break;
 
             case MISS:
-                context.addDamagePopup("MISS", step.target.getX(), step.target.getY(), Color.GRAY, 0.8f);
+                context.popupPool.createMiss(popupX, popupY);
                 break;
 
             case REFLECT:
                 step.target.takeDamage(step.damage);
-                context.addDamagePopup(String.valueOf(step.damage), step.target.getX(), step.target.getY(), Color.CYAN, 1.0f);
+                context.popupPool.createReflect(step.damage, popupX, popupY);
                 break;
 
             case DIE:

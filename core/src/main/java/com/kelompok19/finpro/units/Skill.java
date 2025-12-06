@@ -3,13 +3,13 @@ package com.kelompok19.finpro.units;
 import com.kelompok19.finpro.states.BattleContext;
 
 public enum Skill {
-    CHLOE_AURA("Quiet Strength", "Allies within 2 tiles: Dmg Taken -2") {
+    CHLOE_AURA("Quiet Strength", "Allies within two spaces take -2 damage") {
         @Override
         public int getAuraDamageTaken(Unit me, Unit target, int dist) {
             return (isAlly(me, target) && dist <= 2) ? -2 : 0;
         }
     },
-    ELISE_AURA("Lily's Poise", "Allies within 1 tile: Dmg Taken -3, Dmg Dealt +1") {
+    ELISE_AURA("Lily's Poise", "Grants adjacent allies +1 damage dealt and -3 to damage taken") {
         @Override
         public int getAuraDamageTaken(Unit me, Unit target, int dist) {
             return (isAlly(me, target) && dist == 1) ? -3 : 0;
@@ -19,19 +19,19 @@ public enum Skill {
             return (isAlly(me, target) && dist == 1) ? 1 : 0;
         }
     },
-    BEN_AURA("Fierce Mien", "Enemies within 2 tiles: Avoid -10") {
+    BEN_AURA("Fierce Mien", "Enemies within two spaces get Avoid -10") {
         @Override
         public int getAuraAvoid(Unit me, Unit target, int dist) {
             return (isEnemy(me, target) && dist <= 2) ? -10 : 0;
         }
     },
-    HAROLD_AURA("Misfortunate", "Enemies within 2 tiles: Dodge -15") {
+    HAROLD_AURA("Misfortunate", "Enemies within two spaces get Dodge -15") {
         @Override
         public int getAuraDodge(Unit me, Unit target, int dist) {
             return (isEnemy(me, target) && dist <= 2) ? -15 : 0;
         }
     },
-    CAMILLA_AURA("Rose's Thorns", "Adjacent Allies: Dmg Dealt +3, Dmg Taken -1") {
+    CAMILLA_AURA("Rose's Thorns", "Grants adjacent allies +3 damage dealt and -1 to damage taken") {
         @Override
         public int getAuraDamageDealt(Unit me, Unit target, int dist) {
             return (isAlly(me, target) && dist == 1) ? 3 : 0;
@@ -41,13 +41,13 @@ public enum Skill {
             return (isAlly(me, target) && dist == 1) ? -1 : 0;
         }
     },
-    DAWN_AURA("Rallying Cry", "Allies within 2 tiles: Dmg Dealt +2") {
+    DAWN_AURA("Rallying Cry", "Allies within two spaces deal +2 damage") {
         @Override
         public int getAuraDamageDealt(Unit me, Unit target, int dist) {
             return (isAlly(me, target) && dist <= 2) ? 2 : 0;
         }
     },
-    MASON_SKILL("Competitive", "Adj Ally: Crit +10, Dmg +3, Taken -1") {
+    MASON_SKILL("Competitive", "If there is an adjacent ally, gets Crit+10, +3 to damage dealt, and -1 to damage taken") {
         @Override
         public void applySelfBonuses(Unit me, Unit enemy, BattleContext context, CombatBonusContainer bonuses) {
             if (hasAdjacentAlly(me, context)) {
@@ -57,17 +57,17 @@ public enum Skill {
             }
         }
     },
-    DRAKE_SKILL("Warrior Code", "Adj Ally: Crit +10, Dmg +2, Taken -2") {
+    DRAKE_SKILL("Warrior Code", "If unit's Speed is higher than foe's, gets Crit+10, +2 to damage dealt, and -2 to damage taken") {
         @Override
         public void applySelfBonuses(Unit me, Unit enemy, BattleContext context, CombatBonusContainer bonuses) {
-            if (hasAdjacentAlly(me, context)) {
+            if (me.getEffectiveStats().speed > enemy.getEffectiveStats().speed) {
                 bonuses.crit += 10;
                 bonuses.damageDealt += 2;
                 bonuses.damageTaken -= 2;
             }
         }
     },
-    DIANA_SKILL("Supportive", "Adj Ally: Hit +10, Dmg +2, Taken -2") {
+    DIANA_SKILL("Supportive", "If there is an adjacent ally, gets Hit+10, +2 to damage dealt, and -2 to damage taken") {
         @Override
         public void applySelfBonuses(Unit me, Unit enemy, BattleContext context, CombatBonusContainer bonuses) {
             if (hasAdjacentAlly(me, context)) {
@@ -77,7 +77,7 @@ public enum Skill {
             }
         }
     },
-    LEON_SKILL("Pragmatic", "Enemy not Full HP: Dmg +3, Taken -1") {
+    LEON_SKILL("Pragmatic", "Grants +3 to damage dealt and -1 to damage taken against injured foes") {
         @Override
         public void applySelfBonuses(Unit me, Unit enemy, BattleContext context, CombatBonusContainer bonuses) {
             if (enemy.getCurrentHp() < enemy.getStats().hp) {
@@ -86,7 +86,7 @@ public enum Skill {
             }
         }
     },
-    MARK_SKILL("Chivalry", "Enemy Full HP: Dmg +2, Taken -2") {
+    MARK_SKILL("Chivalry", "Grants +2 to damage dealt and -2 to damage taken against foes with full HP") {
         @Override
         public void applySelfBonuses(Unit me, Unit enemy, BattleContext context, CombatBonusContainer bonuses) {
             if (enemy.getCurrentHp() >= enemy.getStats().hp) {
@@ -95,8 +95,8 @@ public enum Skill {
             }
         }
     },
-    JADE_RALLY("Fancy Footwork", "Command: Allies in 2 tiles get +4 Str/Spd"),
-    MONTY_REFLECT("Divine Retribution", "Reflect half damage if attacked at 1 range");
+    JADE_RALLY("Fancy Footwork", "Use 'Rally' to grant +1 Strength and Speed to allies within two spaces for one turn"),
+    MONTY_REFLECT("Divine Retribution", "Reflect half damage to foe if attacked from an adjacent space");
 
     public final String name;
     public final String desc;

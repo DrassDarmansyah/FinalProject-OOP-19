@@ -6,7 +6,7 @@ import com.kelompok19.finpro.combat.CombatSimulator;
 import com.kelompok19.finpro.combat.CombatStep;
 import com.kelompok19.finpro.states.BattleAnimationState;
 import com.kelompok19.finpro.states.BattleContext;
-import com.kelompok19.finpro.states.CombatCutsceneState;
+import com.kelompok19.finpro.states.NoAnimationState;
 import com.kelompok19.finpro.states.GameStateManager;
 import com.kelompok19.finpro.units.Unit;
 
@@ -35,7 +35,7 @@ public class AttackCommand implements Command {
         }
 
         else {
-            gsm.push(new CombatCutsceneState(gsm, context, steps, attacker));
+            gsm.push(new NoAnimationState(gsm, context, steps, attacker));
         }
     }
 }

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.kelompok19.finpro.GameManager;
+import com.kelompok19.finpro.units.Skill;
 import com.kelompok19.finpro.utils.HoverSystem;
 import com.kelompok19.finpro.Weapon;
 import com.kelompok19.finpro.units.Stats;
@@ -16,7 +17,7 @@ import com.kelompok19.finpro.units.Unit;
 
 import java.util.List;
 
-public class UnitSelectionState extends BattleState {
+public class BattlePrepsState extends BattleState {
     private final List<Unit> roster;
     private final Array<Unit> selectedUnits = new Array<>();
     private final List<int[]> deploymentSlots;
@@ -28,7 +29,7 @@ public class UnitSelectionState extends BattleState {
 
     private boolean viewingMap = false;
 
-    public UnitSelectionState(GameStateManager gsm, BattleContext context) {
+    public BattlePrepsState(GameStateManager gsm, BattleContext context) {
         super(gsm, context);
         this.roster = context.unitManager.getRoster();
         this.deploymentSlots = context.config.getDeploymentSlots(context.map.getHeight());
@@ -280,6 +281,31 @@ public class UnitSelectionState extends BattleState {
                 context.font.setColor(Color.GREEN);
                 context.font.draw(batch, bonusStr, col1, wpY - rowH * 5.5f);
             }
+        }
+
+        float skillY = wpY - (rowH * 7);
+        context.font.setColor(Color.YELLOW);
+        context.font.draw(batch, "SKILL", col1, skillY);
+
+        List<Skill> skills = unit.getSkills();
+        if (!skills.isEmpty()) {
+            for (int i = 0; i < skills.size(); i++) {
+                Skill s = skills.get(i);
+                float sy = skillY - rowH - (i * rowH * 2);
+
+                context.font.setColor(Color.CYAN);
+                context.font.draw(batch, s.name, col1, sy);
+
+                context.font.setColor(Color.LIGHT_GRAY);
+                context.font.getData().setScale(1.0f);
+                context.font.draw(batch, s.desc, col1, sy - 20);
+                context.font.getData().setScale(1.0f);
+            }
+        }
+
+        else {
+            context.font.setColor(Color.GRAY);
+            context.font.draw(batch, "None", col1, skillY - rowH);
         }
 
         context.font.setColor(Color.LIGHT_GRAY);

@@ -12,7 +12,7 @@ import com.kelompok19.finpro.maps.GameMap;
 import com.kelompok19.finpro.maps.MapConfig;
 import com.kelompok19.finpro.states.BattleContext;
 import com.kelompok19.finpro.states.GameStateManager;
-import com.kelompok19.finpro.states.UnitSelectionState;
+import com.kelompok19.finpro.states.BattlePrepsState;
 import com.kelompok19.finpro.units.UnitManager;
 
 public class Main extends ApplicationAdapter {
@@ -45,7 +45,7 @@ public class Main extends ApplicationAdapter {
 
         BattleContext context = new BattleContext(map, unitManager, camera, batch, font, startConfig);
 
-        gsm.push(new UnitSelectionState(gsm, context));
+        gsm.push(new BattlePrepsState(gsm, context));
     }
 
     @Override

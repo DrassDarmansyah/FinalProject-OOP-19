@@ -146,7 +146,7 @@ public class PlayerPhaseState extends BattleState {
             hoverSystem.renderUnitInfo(batch);
         }
 
-        context.turnPreview.render(batch, context.font, context.camera, GameManager.getInstance().getTurnCount(), true, context.config.getObjectiveText());
+        context.turnPreview.render(batch, context.font, context.camera, GameManager.getInstance().getTurnCount(), true, context.config.getObjectiveText(), context.isShowDangerZone(), context.isFightAnimationsOn());
         batch.end();
         renderTerrainInfo(batch);
     }
@@ -189,6 +189,11 @@ public class PlayerPhaseState extends BattleState {
             if (valid) {
                 lastMove = new MoveCommand(selectedUnit, context.cursorX, context.cursorY);
                 lastMove.execute();
+
+                if (context.isShowDangerZone()) {
+                    context.recalculateDangerZone();
+                }
+
                 openActionMenu();
             }
         }
@@ -255,6 +260,11 @@ public class PlayerPhaseState extends BattleState {
         if (Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE) || Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             if (lastMove != null) {
                 lastMove.undo();
+
+                if (context.isShowDangerZone()) {
+                    context.recalculateDangerZone();
+                }
+
                 lastMove = null;
                 calculateMovementRange();
                 state = SubState.MOVING;

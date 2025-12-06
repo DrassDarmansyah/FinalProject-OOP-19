@@ -41,7 +41,7 @@ public class BattleContext {
     private boolean showDangerZone = false;
     private Set<GridPoint2> dangerZoneCache = null;
 
-    private final DamagePopupPool popupPool = new DamagePopupPool();
+    public final DamagePopupPool popupPool = new DamagePopupPool();
 
     public BattleContext(GameMap map, UnitManager unitManager, OrthographicCamera camera, SpriteBatch batch, BitmapFont font, MapConfig config) {
         this.map = map;
@@ -62,7 +62,13 @@ public class BattleContext {
     public void addDamagePopup(String text, int tileX, int tileY, Color color, float scale) {
         float worldX = tileX * 48;
         float worldY = tileY * 48;
-        popupPool.spawnPopup(text, worldX, worldY, color, scale);
+        popupPool.obtain(text, worldX, worldY, color, scale);
+    }
+
+    public void addMissPopup(int tileX, int tileY) {
+        float worldX = tileX * 48;
+        float worldY = tileY * 48;
+        popupPool.createMiss(worldX, worldY);
     }
 
     public void updatePopups(float delta) {

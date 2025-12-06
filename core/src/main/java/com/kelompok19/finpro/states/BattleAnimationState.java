@@ -213,31 +213,37 @@ public class BattleAnimationState extends BattleState {
         float popupX = (step.target == playerUnit) ? sw * 0.25f : sw * 0.75f;
         float popupY = sh * 0.3f + 150;
 
+        DamagePopup popup = null;
+
         switch (step.type) {
             case ATTACK:
                 step.target.takeDamage(step.damage);
-                Color c = step.isCrit ? Color.YELLOW : Color.WHITE;
-                float scale = step.isCrit ? 2.0f : 1.5f;
-                DamagePopup dmg = localPool.obtain();
-                dmg.init(String.valueOf(step.damage), popupX, popupY, c, scale);
-                localPopups.add(dmg);
+
+                if (step.isCrit) {
+                    popup = localPool.createCritDamage(step.damage, popupX, popupY);
+                }
+
+                else {
+                    popup = localPool.createNormalDamage(step.damage, popupX, popupY);
+                }
+
                 break;
 
             case MISS:
-                DamagePopup miss = localPool.obtain();
-                miss.init("MISS", popupX, popupY, Color.GRAY, 1.2f);
-                localPopups.add(miss);
+                popup = localPool.createMiss(popupX, popupY);
                 break;
 
             case REFLECT:
                 step.target.takeDamage(step.damage);
-                DamagePopup refl = localPool.obtain();
-                refl.init(String.valueOf(step.damage), popupX, popupY, Color.CYAN, 1.5f);
-                localPopups.add(refl);
+                popup = localPool.createReflect(step.damage, popupX, popupY);
                 break;
 
             case DIE:
                 break;
+        }
+
+        if (popup != null) {
+            localPopups.add(popup);
         }
     }
 
