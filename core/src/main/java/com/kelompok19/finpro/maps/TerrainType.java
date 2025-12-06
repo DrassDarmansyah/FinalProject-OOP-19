@@ -4,6 +4,8 @@ import com.kelompok19.finpro.units.MovementType;
 
 public enum TerrainType {
     BRIDGE(0, 0, 0),
+    CAVERN(0, 0, 0),
+    FORT(2, 20, 20),
     LEYLINE(0, 0, 0),
     PLAIN(0, 0, 0),
     RUBBLE(0, 0, 0),
@@ -27,11 +29,21 @@ public enum TerrainType {
             case PLAIN:
                 return 1;
 
+            case FORT:
+                if (moveType == MovementType.MAGE) {
+                    return 1;
+                }
+
+                return 2;
+
             case RUBBLE:
                 if (moveType == MovementType.MAGE) {
                     return 1;
                 }
 
+                return 999;
+
+            case CAVERN:
                 return 999;
 
             case WATER:

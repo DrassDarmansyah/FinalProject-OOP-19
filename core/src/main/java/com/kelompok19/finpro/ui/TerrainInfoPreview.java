@@ -9,13 +9,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import com.kelompok19.finpro.maps.TerrainType;
 
-public class TerrainInfo implements Disposable {
+public class TerrainInfoPreview implements Disposable {
     private final Texture bgTexture;
-    private final float WIDTH = 140;
-    private final float HEIGHT = 80;
-    private final float PADDING = 10;
+    private final float WIDTH = 160;
+    private final float HEIGHT = 100;
 
-    public TerrainInfo() {
+    public TerrainInfoPreview() {
         Pixmap p = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         p.setColor(0.1f, 0.1f, 0.1f, 0.8f);
         p.fill();
@@ -33,8 +32,8 @@ public class TerrainInfo implements Disposable {
 
         float camRight = camLeft + (camera.viewportWidth * camera.zoom);
 
-        float x = camRight - WIDTH - PADDING;
-        float y = camBottom + PADDING;
+        float x = camRight - WIDTH;
+        float y = camBottom;
 
         batch.draw(bgTexture, x, y, WIDTH, HEIGHT);
 

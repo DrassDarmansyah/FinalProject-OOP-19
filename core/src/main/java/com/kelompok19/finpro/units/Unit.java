@@ -7,6 +7,11 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.kelompok19.finpro.Weapon;
+import com.kelompok19.finpro.ai.AIBehavior;
+import com.kelompok19.finpro.factories.AnimationFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Unit {
     private String name;
@@ -16,30 +21,63 @@ public class Unit {
     private final UnitJob job;
     private boolean hasMoved;
 
-    private final Stats stats; // The Final Calculated Stats
-    private final Stats personalStats; // Kept for reference if needed
+    private final Stats stats;
     private final Weapon weapon;
     private int currentHp;
+    private final List<Skill> skills = new ArrayList<>();
+    private Stats tempStats;
 
     private Texture characterTexture;
     private Animation<TextureRegion> idleAnimation;
     private float stateTime;
 
-    public Unit(String name, int x, int y, UnitType type, UnitJob job, Stats personalStats, Weapon weapon) {
+    private AIBehavior aiBehavior;
+
+    public Unit(String name, int x, int y, UnitType type, UnitJob job, Stats providedStats, Weapon weapon) {
         this.name = name;
         this.x = x;
         this.y = y;
         this.type = type;
         this.job = job;
-        this.personalStats = personalStats;
         this.hasMoved = false;
-
-        this.stats = job.getBaseStats().add(personalStats);
-
         this.weapon = weapon;
+        this.stats = providedStats;
+        this.tempStats = new Stats(0,0,0,0,0,0,0,0);
         this.currentHp = this.stats.hp;
-
         initializeAnimations(job.getTexturePath());
+    }
+
+    public Stats getEffectiveStats() {
+        Stats base = stats.add(tempStats);
+
+        if (weapon != null && weapon.bonuses != null) {
+            return base.add(weapon.bonuses);
+        }
+
+        return base;
+    }
+
+    public void addTempStats(Stats buff) {
+        this.tempStats = this.tempStats.add(buff);
+    }
+
+    public void resetTurn() {
+        this.setHasMoved(false);
+        this.tempStats = new Stats(0,0,0,0,0,0,0,0);
+    }
+
+    public void addSkill(Skill skill) {
+        if (!skills.contains(skill)) {
+            skills.add(skill);
+        }
+    }
+
+    public boolean hasSkill(Skill skill) {
+        return skills.contains(skill);
+    }
+
+    public List<Skill> getSkills() {
+        return skills;
     }
 
     public void update(float delta) {
@@ -49,7 +87,9 @@ public class Unit {
     }
 
     public void render(SpriteBatch batch, Texture whitePixel) {
-        update(Gdx.graphics.getDeltaTime());
+        if (!hasMoved) {
+            stateTime += Gdx.graphics.getDeltaTime();
+        }
 
         TextureRegion frame = getCurrentFrame();
 
@@ -99,6 +139,38 @@ public class Unit {
         }
 
         batch.setColor(1f, 1f, 1f, 1f);
+    }
+
+    public Animation<TextureRegion> loadAnimation(int type) {
+        String path = null;
+
+        switch (type) {
+            case 1:
+                path = job.getAttack1Path();
+                break;
+
+            case 2:
+                path = job.getAttack2Path();
+                break;
+
+            case 3:
+                path = job.getCritPath();
+                break;
+
+            case 4:
+                path = job.getHurtPath();
+                break;
+
+            case 5:
+                path = job.getDeathPath();
+                break;
+        }
+
+        return AnimationFactory.getInstance().getAnimation(path);
+    }
+
+    public Animation<TextureRegion> loadMagicAnimation() {
+        return com.kelompok19.finpro.factories.AnimationFactory.getInstance().getAnimation(job.getMagicPath());
     }
 
     public void takeDamage(int damage) {
@@ -182,17 +254,11 @@ public class Unit {
             return null;
         }
 
-        if (hasMoved) {
+        if (hasMoved && type == UnitType.PLAYER) {
             return idleAnimation.getKeyFrames()[0];
         }
 
         return idleAnimation.getKeyFrame(stateTime, true);
-    }
-
-    public void dispose() {
-        if (characterTexture != null) {
-            characterTexture.dispose();
-        }
     }
 
     private void initializeAnimations(String textureName) {
@@ -201,21 +267,8 @@ public class Unit {
         }
 
         catch (Exception e) {
-            Gdx.app.error("ASSET ERROR", "Could not load " + textureName, e);
-
-            try {
-                if (type == UnitType.PLAYER) {
-                    characterTexture = new Texture(Gdx.files.internal("Knight-Idle.png"));
-                }
-
-                else {
-                    characterTexture = new Texture(Gdx.files.internal("Orc-Idle.png"));
-                }
-            }
-
-            catch (Exception ex) {
-                return;
-            }
+            Gdx.app.error("ASSET", "Error loading " + textureName);
+            return;
         }
 
         TextureRegion[][] idleFrames2D = TextureRegion.split(characterTexture, 100, 100);
@@ -228,5 +281,19 @@ public class Unit {
         idleAnimation = new Animation<>(1f/12f, idleFrames);
         idleAnimation.setPlayMode(Animation.PlayMode.LOOP);
         stateTime = 0f;
+    }
+
+    public void setAI(AIBehavior behavior) {
+        this.aiBehavior = behavior;
+    }
+
+    public AIBehavior getAI() {
+        return aiBehavior;
+    }
+
+    public void dispose() {
+        if (characterTexture != null) {
+            characterTexture.dispose();
+        }
     }
 }

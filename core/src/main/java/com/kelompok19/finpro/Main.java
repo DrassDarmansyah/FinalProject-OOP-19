@@ -6,12 +6,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.kelompok19.finpro.chapters.Chapter1;
 import com.kelompok19.finpro.combat.CombatPreview;
 import com.kelompok19.finpro.maps.GameMap;
 import com.kelompok19.finpro.maps.MapConfig;
 import com.kelompok19.finpro.states.BattleContext;
-import com.kelompok19.finpro.states.BrowsingState;
 import com.kelompok19.finpro.states.GameStateManager;
+import com.kelompok19.finpro.states.UnitSelectionState;
 import com.kelompok19.finpro.units.UnitManager;
 
 public class Main extends ApplicationAdapter {
@@ -29,26 +30,22 @@ public class Main extends ApplicationAdapter {
         font = new BitmapFont();
         gsm = new GameStateManager();
 
-        map = new GameMap(MapConfig.CHAPTER_1);
+        MapConfig startConfig = new Chapter1();
+        map = new GameMap(startConfig);
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera(w, h);
         camera.setToOrtho(false, w, h);
         camera.zoom = 1.0f;
-
-        float mapWidthWorld = map.getWidth() * map.getTileSize();
-        float mapHeightWorld = map.getHeight() * map.getTileSize();
-        camera.position.set(mapWidthWorld / 2f, mapHeightWorld / 2f, 0);
+        camera.position.set(map.getWidth() * map.getTileSize() / 2f, map.getHeight() * map.getTileSize() / 2f, 0);
         camera.update();
 
-        unitManager = new UnitManager(map.getHeight());
+        unitManager = new UnitManager(true);
 
-        GameManager.getInstance().startNewSession();
+        BattleContext context = new BattleContext(map, unitManager, camera, batch, font, startConfig);
 
-        BattleContext context = new BattleContext(map, unitManager, camera, batch, font);
-
-        gsm.push(new BrowsingState(gsm, context));
+        gsm.push(new UnitSelectionState(gsm, context));
     }
 
     @Override

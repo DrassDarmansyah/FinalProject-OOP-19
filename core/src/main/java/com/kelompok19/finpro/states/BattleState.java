@@ -13,6 +13,16 @@ public abstract class BattleState implements GameState {
         this.context = context;
     }
 
+    protected boolean checkObjectives() {
+        if (context.config.checkObjective(context.unitManager)) {
+            System.out.println("VICTORY CONDITION MET!");
+            gsm.set(new MapTransitionState(gsm, context, context.config.getNextMap()));
+            return true;
+        }
+
+        return false;
+    }
+
     protected void renderMapAndUnits(SpriteBatch batch) {
         context.map.render(context.camera);
 
@@ -30,12 +40,19 @@ public abstract class BattleState implements GameState {
         batch.end();
     }
 
+    protected void renderPopups(SpriteBatch batch) {
+        context.updatePopups(Gdx.graphics.getDeltaTime());
+        batch.begin();
+        context.renderPopups();
+        batch.end();
+    }
+
     protected void renderTerrainInfo(SpriteBatch batch) {
         Tile tile = context.map.getTile(context.cursorX, context.cursorY);
 
         if (tile != null) {
             batch.begin();
-            context.terrainInfo.render(batch, context.font, context.camera, tile.getType());
+            context.terrainPreview.render(batch, context.font, context.camera, tile.getType());
             batch.end();
         }
     }

@@ -1,21 +1,117 @@
 package com.kelompok19.finpro.units;
 
 import com.kelompok19.finpro.Weapon;
+import com.kelompok19.finpro.factories.UnitFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
 
 public class UnitManager {
     private final List<Unit> playerUnits = new ArrayList<>();
     private final List<Unit> enemyUnits = new ArrayList<>();
+    private final List<Unit> roster = new ArrayList<>();
 
-    public UnitManager(int mapHeight) {
-        setupCharacters(mapHeight);
+    public UnitManager(boolean initRoster) {
+        if (initRoster) {
+            initializeRoster();
+        }
     }
 
-    public List<Unit> getPlayerUnits() { return playerUnits; }
-    public List<Unit> getEnemyUnits() { return enemyUnits; }
+    public void healAllUnits() {
+        for (Unit unit : roster) {
+            unit.setCurrentHp(unit.getStats().hp);
+            unit.resetTurn();
+        }
+    }
+
+    private void initializeRoster() {
+        Stats noBonus = new Stats(0,0,0,0,0,0,0,0);
+
+        Stats holyBonuses = new Stats(0, 2, 0, 0, 3, 0, 1, 1);
+        Weapon holySword = new Weapon("Holy Sword", 11, 85, 5, 10, 0, 1, 1, holyBonuses);
+        roster.add(UnitFactory.createPlayer("Diana", UnitJob.SWORDMASTER,
+            new Stats(44, 37, 18, 29, 28, 18, 28, 13), holySword));
+
+        Weapon jadeSword = new Weapon("Sword", 12, 90, 0, 0, -5, 1, 1, noBonus);
+        roster.add(UnitFactory.createPlayer("Jade", UnitJob.SWORD_SOLDIER,
+            new Stats(49, 33, 0, 37, 27, 31, 24, 14), jadeSword));
+
+        Weapon masonBow = new Weapon("Bow", 15, 80, 0, 0, -5, 2, 2, noBonus);
+        roster.add(UnitFactory.createPlayer("Mason", UnitJob.BOW_SOLDIER,
+            new Stats(45, 29, 0, 38, 30, 28, 25, 11), masonBow));
+
+        Weapon drakeSword = new Weapon("Sword", 12, 90, 0, 0, -5, 1, 1, noBonus);
+        roster.add(UnitFactory.createPlayer("Drake", UnitJob.KNIGHT,
+            new Stats(46, 29, 3, 28, 34, 29, 22, 19), drakeSword));
+
+        Weapon fireSword = new Weapon("Fire Sword", 11, 80, 0, -20, 0, 1, 2, noBonus);
+        roster.add(UnitFactory.createPlayer("Leon", UnitJob.FIRE_KNIGHT,
+            new Stats(45, 22, 32, 21, 24, 24, 24, 29), fireSword));
+
+        Weapon benLance = new Weapon("Lance", 14, 80, 0, 0, -5, 1, 1, noBonus);
+        roster.add(UnitFactory.createPlayer("Ben", UnitJob.TEMPLAR,
+            new Stats(52, 32, 0, 32, 9, 24, 41, 24), benLance));
+
+        Weapon fireLance = new Weapon("Fire Lance", 11, 70, 0, -20, 0, 1, 2, noBonus);
+        roster.add(UnitFactory.createPlayer("Monty", UnitJob.FIRE_LANCER,
+            new Stats(47, 19, 34, 25, 32, 31, 29, 21), fireLance));
+
+        Weapon markLance = new Weapon("Lance", 14, 80, 0, 0, -5, 1, 1, noBonus);
+        roster.add(UnitFactory.createPlayer("Mark", UnitJob.LANCER,
+            new Stats(47, 33, 5, 26, 22, 32, 31, 15), markLance));
+
+        Weapon haroldAxe = new Weapon("Axe", 16, 70, 0, 0, -5, 1, 1, noBonus);
+        roster.add(UnitFactory.createPlayer("Harold", UnitJob.ARMORED_AXEMAN,
+            new Stats(47, 33, 0, 36, 26, 5, 29, 11), haroldAxe));
+
+        Weapon ice = new Weapon("Ice", 11, 80, 0, 0, -5, 1, 2, noBonus);
+        roster.add(UnitFactory.createPlayer("Elise", UnitJob.ICE_WIZARD,
+            new Stats(30, 4, 36, 16, 32, 34, 10, 33), ice));
+
+        Weapon fire = new Weapon("Fire", 11, 80, 0, 0, -5, 1, 2, noBonus);
+        roster.add(UnitFactory.createPlayer("Camilla", UnitJob.FIRE_WIZARD,
+            new Stats(38, 19, 31, 27, 28, 17, 27, 26), fire));
+
+        Weapon light = new Weapon("Light", 11, 80, 0, 0, -5, 1, 2, noBonus);
+        roster.add(UnitFactory.createPlayer("Chloe", UnitJob.PRIEST,
+            new Stats(32, 14, 33, 24, 28, 27, 17, 21), light));
+
+        Weapon dawnBow = new Weapon("Bow", 15, 80, 0, 0, -5, 2, 2, noBonus);
+        roster.add(UnitFactory.createPlayer("Dawn", UnitJob.ARCHER,
+            new Stats(40, 29, 9, 33, 33, 29, 24, 28), dawnBow));
+    }
+
+    public List<Unit> getRoster() { return roster; }
+
+    public void deployUnit(Unit unit, int x, int y) {
+        unit.setPosition(x, y);
+        unit.setHasMoved(false);
+
+        if (!playerUnits.contains(unit)) {
+            playerUnits.add(unit);
+        }
+    }
+
+    public void clearDeployedUnits() {
+        playerUnits.clear();
+        enemyUnits.clear();
+    }
+
+    public void addUnit(Unit unit) {
+        if (unit.getType() == UnitType.PLAYER) {
+            playerUnits.add(unit);
+        }
+
+        else enemyUnits.add(unit);
+    }
+
+    public List<Unit> getPlayerUnits() {
+        return playerUnits;
+    }
+
+    public List<Unit> getEnemyUnits() {
+        return enemyUnits;
+    }
 
     public Unit getUnitAt(int x, int y) {
         Unit p = getPlayerUnitAt(x, y);
@@ -35,6 +131,12 @@ public class UnitManager {
         }
 
         return null;
+    }
+
+    public List<Unit> getAllUnits() {
+        List<Unit> all = new ArrayList<>(playerUnits);
+        all.addAll(enemyUnits);
+        return all;
     }
 
     public Unit getEnemyUnitAt(int x, int y) {
@@ -62,7 +164,6 @@ public class UnitManager {
 
         return false;
     }
-
     public void removeUnit(Unit unit) {
         playerUnits.remove(unit);
         enemyUnits.remove(unit);
@@ -72,40 +173,5 @@ public class UnitManager {
     public void cleanup() {
         playerUnits.removeIf(u -> u.getCurrentHp() <= 0);
         enemyUnits.removeIf(u -> u.getCurrentHp() <= 0);
-    }
-
-    private void setupCharacters(int mapHeight) {
-        BiFunction<Integer, Integer, int[]> convert = (v, h) -> new int[]{h - 1, mapHeight - v};
-
-        Stats heroPersonal = new Stats(6, 6, 6, 5, 5, 10, 3, 2);
-        Weapon heroWeapon = new Weapon(8, 90, 10, 5, 1);
-        int[] pos = convert.apply(7, 12);
-        playerUnits.add(new Unit("Hero", pos[0], pos[1], UnitType.PLAYER, UnitJob.SWORDMASTER, heroPersonal, heroWeapon));
-
-        Stats jagenPersonal = new Stats(12, 7, 0, 5, 3, 4, 5, 1);
-        Weapon jagenWeapon = new Weapon(10, 80, 5, 0, 1);
-        pos = convert.apply(6, 11);
-        playerUnits.add(new Unit("Jagen", pos[0], pos[1], UnitType.PLAYER, UnitJob.LANCER, jagenPersonal, jagenWeapon));
-
-        Stats magePersonal = new Stats(3, 2, 6, 6, 4, 8, 1, 2);
-        Weapon mageWeapon = new Weapon(6, 85, 5, 0, 1, 2);
-        pos = convert.apply(5, 13);
-        playerUnits.add(new Unit("Mage", pos[0], pos[1], UnitType.PLAYER, UnitJob.WIZARD, magePersonal, mageWeapon));
-
-        Weapon axeWeapon = new Weapon(9, 70, 0, 0, 1);
-        Stats genericBonus = new Stats(2, 2, 0, 1, 1, 0, 1, 0);
-
-        int[][] enemyPos = {
-            convert.apply(8, 12), convert.apply(13, 16), convert.apply(13, 18),
-            convert.apply(11, 7), convert.apply(13, 6), convert.apply(13, 8)
-        };
-
-        enemyUnits.add(new Unit("Orc 1", enemyPos[0][0], enemyPos[0][1], UnitType.ENEMY, UnitJob.ORC, genericBonus, axeWeapon));
-        enemyUnits.add(new Unit("Skel 1", enemyPos[1][0], enemyPos[1][1], UnitType.ENEMY, UnitJob.SKELETON, genericBonus, axeWeapon));
-        enemyUnits.add(new Unit("Skel 2", enemyPos[2][0], enemyPos[2][1], UnitType.ENEMY, UnitJob.SKELETON_ARCHER, genericBonus, new Weapon(7, 85, 0, 0, 2, 2)));
-        enemyUnits.add(new Unit("Orc 2", enemyPos[3][0], enemyPos[3][1], UnitType.ENEMY, UnitJob.ORC, genericBonus, axeWeapon));
-
-        Stats bossBonus = new Stats(5, 3, 0, 2, 2, 5, 2, 2);
-        enemyUnits.add(new Unit("Boss", enemyPos[4][0], enemyPos[4][1], UnitType.ENEMY, UnitJob.ELITE_ORC, bossBonus, new Weapon(12, 75, 10, 0, 1)));
     }
 }

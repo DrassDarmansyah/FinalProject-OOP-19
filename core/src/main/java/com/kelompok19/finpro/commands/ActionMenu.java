@@ -20,6 +20,8 @@ public class ActionMenu implements Disposable {
 
     public static final String CMD_MOVE = "Move";
     public static final String CMD_ATTACK = "Attack";
+    public static final String CMD_HEAL = "Heal";
+    public static final String CMD_RALLY = "Rally";
     public static final String CMD_ACCESS = "Access";
     public static final String CMD_WAIT = "Wait";
 
@@ -35,19 +37,53 @@ public class ActionMenu implements Disposable {
         p.dispose();
     }
 
-    public void show(boolean canMove, boolean canAttack, boolean canAccess, boolean isPostMove) {
+    public void show(boolean canMove, boolean canAttack, boolean canHeal, boolean canRally, boolean canAccess, boolean isPostMove) {
         options.clear();
         selectedIndex = 0;
         isVisible = true;
 
         if (isPostMove) {
-            if (canAttack) options.add(CMD_ATTACK);
-            if (canAccess) options.add(CMD_ACCESS);
+            if (canAttack) {
+                options.add(CMD_ATTACK);
+            }
+
+            if (canHeal) {
+                options.add(CMD_HEAL);
+            }
+
+            if (canRally) {
+                options.add(CMD_RALLY);
+            }
+
+            if (canAccess) {
+                options.add(CMD_ACCESS);
+            }
+
             options.add(CMD_WAIT);
-        } else {
-            if (canMove) options.add(CMD_MOVE);
-            if (canAttack) options.add(CMD_ATTACK);
-            if (canAccess) options.add(CMD_ACCESS);
+        }
+
+        else {
+            if (canMove) {
+                options.add(CMD_MOVE);
+            }
+
+            if (canAttack) {
+                options.add(CMD_ATTACK);
+            }
+
+            if (canHeal) {
+                options.add(CMD_HEAL);
+            }
+
+            if (canRally) {
+                options.add(CMD_RALLY);
+            }
+
+            if (canAccess) {
+                options.add(CMD_ACCESS);
+            }
+
+            options.add(CMD_WAIT);
         }
     }
 

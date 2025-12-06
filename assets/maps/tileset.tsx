@@ -16,6 +16,11 @@
    <property name="terrain" value="RUBBLE"/>
   </properties>
  </tile>
+ <tile id="28">
+  <properties>
+   <property name="terrain" value="CAVERN"/>
+  </properties>
+ </tile>
  <tile id="48">
   <properties>
    <property name="terrain" value="BRIDGE"/>
@@ -29,6 +34,11 @@
  <tile id="152">
   <properties>
    <property name="terrain" value="WOODS"/>
+  </properties>
+ </tile>
+ <tile id="218">
+  <properties>
+   <property name="terrain" value="FORT"/>
   </properties>
  </tile>
  <tile id="296">
